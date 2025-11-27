@@ -4,3 +4,17 @@ __pycache__/
 .env
 .vscode/
 .idea/
+
+.venv/
+__pycache__/
+*.pyc
+snapshots/
+*.log
+.DS_Store
+
+.venv/
+__pycache__/
+*.pyc
+snapshots/
+*.log
+.DS_Store

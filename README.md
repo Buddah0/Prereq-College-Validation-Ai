@@ -4,6 +4,7 @@ A market‑relevant SaaS that converts college course catalogs into a graph mode
 
 Table of Contents
 - Project Overview
+- Ingest Usage
 - Features and Specifications
 - Core Capabilities
 - Data Model Summary
@@ -31,6 +32,31 @@ Value proposition
 - Detect impossible or inconsistent prerequisite rules before they affect students
 - Reveal hidden prerequisites that inflate credit requirements
 - Identify bottleneck courses and long prerequisite chains that delay graduation
+
+##Ingest Usage 
+Quick usage notes for the `scripts/ingest.py` ingestion script.
+
+Install dependencies:
+
+```powershell
+pip install -r requirements.txt
+```
+
+Run the ingester (defaults):
+
+```powershell
+python .\scripts\ingest.py
+```
+
+Specify source and output:
+
+```powershell
+python .\scripts\ingest.py --source samples/sample-catalog.html --out snapshots/latest.json
+```
+
+Output structure:
+
+- JSON array of course objects with keys: `id`, `name`, `prerequisites`.
 
 Features and Specifications
 Core Capabilities

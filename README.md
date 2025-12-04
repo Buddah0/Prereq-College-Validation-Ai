@@ -27,10 +27,13 @@ Primary users
 - Academic advisors and institutional researchers
 - Students (via optional planning assistant)
 - Deans and department chairs
-Value proposition
+
+### Value proposition
 - Detect impossible or inconsistent prerequisite rules before they affect students
 - Reveal hidden prerequisites that inflate credit requirements
 - Identify bottleneck courses and long prerequisite chains that delay graduation
+
+---
 
 ## Ingest Usage and Quick Start
 Quick usage notes for the `scripts/ingest.py` ingestion script.
@@ -61,9 +64,6 @@ This repo includes a tiny demo catalog and its parsed output:
 
 - Input HTML: [`samples/sample-catalog.html`](samples/sample-catalog.html)
 - Output JSON: [`samples/sample-output.json`](samples/sample-output.json)
-
-Refer to `samples/sample-output.json` for an example of the structured output
-produced by the ingester.
 
 ---
 

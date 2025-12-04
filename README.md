@@ -33,7 +33,7 @@ Value proposition
 - Reveal hidden prerequisites that inflate credit requirements
 - Identify bottleneck courses and long prerequisite chains that delay graduation
 
-##Ingest Usage 
+## Ingest Usage 
 Quick usage notes for the `scripts/ingest.py` ingestion script.
 
 Install dependencies:

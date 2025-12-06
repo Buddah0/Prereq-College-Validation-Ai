@@ -1,84 +1,81 @@
-from typing import Dict, List
-from topic_model import Topic
+import json
+from pathlib import Path
+from typing import Iterable, List, Dict, Set
+import networkx as nx
 
-
-class TopicGraph:
+def load_course_graph(json_path: str) -> nx.DiGraph:
     """
-    Stores all topics and lets us look them up by id.
+    Loads course data from a JSON file and builds a directed graph.
+    
+    Args:
+        json_path: Path to the JSON file containing course data.
+        
+    Returns:
+        A networkx.DiGraph where nodes are course IDs and edges represent prerequisites.
+        Node attributes include 'name'.
     """
-    def __init__(self) -> None:
-        # key: topic id, value: Topic object
-        self.topics: Dict[str, Topic] = {}
-
-    def add_topic(self, topic: Topic) -> None:
-        self.topics[topic.id] = topic
-
-    def get_topic(self, topic_id: str) -> Topic:
-        return self.topics[topic_id]
-
-    def list_topics(self) -> List[Topic]:
-        return list(self.topics.values())
-
-
-def build_sample_graph() -> TopicGraph:
-    """
-    Creates a small set of CS topics with prerequisites between them.
-    """
-    g = TopicGraph()
-
-    g.add_topic(Topic(
-        id="intro_programming",
-        name="Intro Programming (variables, loops)",
-        description="Basic variables, conditionals, and loops."
-    ))
-
-    g.add_topic(Topic(
-        id="arrays",
-        name="Arrays",
-        description="Fixed-size sequences of elements.",
-        prerequisites=["intro_programming"]
-    ))
-
-    g.add_topic(Topic(
-        id="linked_lists",
-        name="Linked Lists",
-        description="Nodes linked by pointers/references.",
-        prerequisites=["arrays"]
-    ))
-
-    g.add_topic(Topic(
-        id="stacks",
-        name="Stacks",
-        description="LIFO data structure built on arrays/linked lists.",
-        prerequisites=["arrays", "intro_programming"]
-    ))
-
-    g.add_topic(Topic(
-        id="queues",
-        name="Queues",
-        description="FIFO data structure.",
-        prerequisites=["arrays", "intro_programming"]
-    ))
-
-    g.add_topic(Topic(
-        id="recursion",
-        name="Recursion",
-        description="Functions that call themselves.",
-        prerequisites=["intro_programming"]
-    ))
-
-    g.add_topic(Topic(
-        id="trees",
-        name="Trees",
-        description="Hierarchical data structure with parent/child nodes.",
-        prerequisites=["linked_lists", "recursion"]
-    ))
-
-    g.add_topic(Topic(
-        id="binary_search_trees",
-        name="Binary Search Trees",
-        description="Ordered tree structure for fast search.",
-        prerequisites=["trees"]
-    ))
-
+    path = Path(json_path)
+    if not path.exists():
+        raise FileNotFoundError(f"File not found: {json_path}")
+        
+    with open(path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+        
+    g = nx.DiGraph()
+    
+    for course in data:
+        course_id = course["id"]
+        # Add the node with attributes
+        g.add_node(course_id, name=course["name"])
+        
+        # Add edges for prerequisites
+        # If A is a prerequisite for B, the edges goes from A -> B
+        # This means "A must be done before B"
+        for prereq_id in course.get("prerequisites", []):
+            g.add_edge(prereq_id, course_id)
+            
     return g
+
+def detect_cycles(graph: nx.DiGraph) -> List[List[str]]:
+    """
+    Detects simple cycles in the graph.
+    
+    Args:
+        graph: The course graph.
+        
+    Returns:
+        A list of cycles, where each cycle is a list of node IDs.
+    """
+    try:
+        return list(nx.simple_cycles(graph))
+    except (nx.NetworkXNoCycle, nx.NetworkXError):
+        return []
+
+def get_unlocked_courses(graph: nx.DiGraph, completed_courses: Iterable[str]) -> List[str]:
+    """
+    Identifies courses that are unlocked given a set of completed courses.
+    
+    A course is unlocked if:
+    1. It is not already completed.
+    2. All its direct prerequisites are in the completed_courses set.
+    
+    Args:
+        graph: The course graph.
+        completed_courses: A collection of course IDs that have been completed.
+        
+    Returns:
+        A list of unlocked course IDs.
+    """
+    completed = set(completed_courses)
+    unlocked = []
+    
+    for node in graph.nodes():
+        if node in completed:
+            continue
+            
+        # Check if all predecessors (prerequisites) are completed
+        prerequisites = list(graph.predecessors(node))
+        if all(prereq in completed for prereq in prerequisites):
+            unlocked.append(node)
+            
+    return unlocked

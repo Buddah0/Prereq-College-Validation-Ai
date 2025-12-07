@@ -11,7 +11,16 @@ from pathlib import Path
 
 def ingest(source: str, out: str = "samples/sample-output.json"):
     # Minimal stub: copy source path info into a snapshot JSON
-    snapshot = {"source": source, "status": "stub", "courses": []}
+    # Minimal stub: copy source path info into a snapshot JSON (as a list)
+    # matching the schema expected by topic_graph.py
+    snapshot = [
+        {
+            "id": "STUB101", 
+            "name": "Stub Course from Ingest", 
+            "prerequisites": [],
+            "source": source
+        }
+    ]
     Path(out).parent.mkdir(parents=True, exist_ok=True)
     with open(out, "w", encoding="utf-8") as f:
         json.dump(snapshot, f, indent=2)

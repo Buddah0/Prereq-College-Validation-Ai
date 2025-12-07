@@ -9,7 +9,7 @@ import sys
 # Add parent directory to path to import topic_graph
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from topic_graph import load_course_graph, detect_cycles, get_unlocked_courses
+from topic_graph import build_course_graph, detect_cycles, get_unlocked_courses
 
 class TestTopicGraph(unittest.TestCase):
     def setUp(self):
@@ -45,7 +45,7 @@ class TestTopicGraph(unittest.TestCase):
         os.unlink(self.temp_file.name)
 
     def test_load_course_graph(self):
-        g = load_course_graph(self.temp_file.name)
+        g = build_course_graph(self.temp_file.name)
         self.assertIsInstance(g, nx.DiGraph)
         self.assertEqual(len(g.nodes), 4)
         self.assertEqual(len(g.edges), 3) # CS101->CS201, CS201->CS301, CS202->CS301
@@ -57,7 +57,7 @@ class TestTopicGraph(unittest.TestCase):
         self.assertTrue(g.has_edge("CS202", "CS301"))
 
     def test_detect_cycles_no_cycle(self):
-        g = load_course_graph(self.temp_file.name)
+        g = build_course_graph(self.temp_file.name)
         cycles = detect_cycles(g)
         self.assertEqual(cycles, [])
 
@@ -69,7 +69,7 @@ class TestTopicGraph(unittest.TestCase):
         self.assertTrue(len(cycles) > 0)
 
     def test_get_unlocked_courses(self):
-        g = load_course_graph(self.temp_file.name)
+        g = build_course_graph(self.temp_file.name)
         
         # No courses completed
         unlocked = get_unlocked_courses(g, [])

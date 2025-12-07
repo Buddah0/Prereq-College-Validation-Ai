@@ -56,6 +56,20 @@ Specify source and output:
 python .\scripts\ingest.py --source samples/sample-catalog.html --out snapshots/latest.json
 ```
 
+## Running the Analysis Demo
+
+After ingesting data (or using the provided sample), you can run the analysis demo:
+
+```powershell
+python main.py
+```
+
+This will:
+1. Load the course graph from `samples/sample-output.json`.
+2. Detect and warn about any circular dependencies.
+3. Show an example prerequisite chain.
+4. Show unlocked courses based on a sample student history.
+
 ## Output structure:
 
 ### Example input & output

@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Iterable, List, Dict, Set
 import networkx as nx
 
-def load_course_graph(json_path: str) -> nx.DiGraph:
+def build_course_graph(json_path: str) -> nx.DiGraph:
     """
     Loads course data from a JSON file and builds a directed graph.
     

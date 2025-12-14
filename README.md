@@ -81,6 +81,30 @@ This repo includes a tiny demo catalog and its parsed output:
 
 ---
 
+## Analysis CLI
+
+The project includes a command-line interface for validating curriculum graphs.
+
+### Validate
+Run a full analysis of the curriculum graph to find issues like cycles, bottlenecks, and missing prerequisites.
+```bash
+python scripts/analyze.py validate --json snapshots/latest.json --out reports/report.json --csv reports/issues.csv
+```
+
+### Cycles
+Quickly check for circular dependencies.
+```bash
+python scripts/analyze.py cycles --json snapshots/latest.json
+```
+
+### Unlocked Courses
+List courses unlocked by a set of completed courses.
+```bash
+python scripts/analyze.py unlocked --json snapshots/latest.json --completed CS101,MATH101
+```
+
+--- 
+
 ## Core Capabilities
 - Catalog Ingestion
 - HTML scraping, PDF extraction, and catalog API connectors

@@ -1,0 +1,2 @@
+severity,code,courses,message
+low,isolated_course,STUB101,Course 'STUB101' has no prerequisites and is not a prerequisite for any other course.

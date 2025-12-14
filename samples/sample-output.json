@@ -1,28 +1,8 @@
 [
   {
-    "id": "CS101",
-    "name": "Introduction to Computer Science",
-    "prerequisites": [
-      "MATH101",
-      "ENGL100"
-    ]
-  },
-  {
-    "id": "MATH101",
-    "name": "Calculus I",
-    "prerequisites": []
-  },
-  {
-    "id": "ENGL100",
-    "name": "Freshman Composition",
-    "prerequisites": []
-  },
-  {
-    "id": "CS201",
-    "name": "Data Structures",
-    "prerequisites": [
-      "CS101",
-      "MATH101"
-    ]
+    "id": "STUB101",
+    "name": "Stub Course from Ingest",
+    "prerequisites": [],
+    "source": "samples/sample-catalog.html"
   }
 ]

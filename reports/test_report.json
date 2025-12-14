@@ -1,0 +1,28 @@
+{
+  "source_path": "samples/sample-output.json",
+  "generated_at": "2025-12-14T00:52:46.679987",
+  "metrics": {
+    "course_count": 1,
+    "total_nodes_in_graph": 1,
+    "num_cycles": 0,
+    "num_missing_prereqs": 0,
+    "num_isolated": 1,
+    "top_bottlenecks": [],
+    "longest_chain_len": 1,
+    "longest_chain_path": [
+      "STUB101"
+    ],
+    "longest_chain_blocked_by_cycles": false
+  },
+  "issues": [
+    {
+      "code": "isolated_course",
+      "severity": "low",
+      "courses": [
+        "STUB101"
+      ],
+      "message": "Course 'STUB101' has no prerequisites and is not a prerequisite for any other course.",
+      "meta": {}
+    }
+  ]
+}

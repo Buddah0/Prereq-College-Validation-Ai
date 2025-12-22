@@ -1,0 +1,35 @@
+openapi: 3.0.3
+info:
+  title: Prereq Validator API
+  version: 0.1.0
+  description: Minimal OpenAPI placeholder for the AI Course Prerequisite Validator.
+servers:
+  - url: http://localhost:8000
+paths:
+  /ingest:
+    post:
+      summary: Start an ingestion job
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                source_url:
+                  type: string
+      responses:
+        '202':
+          description: Accepted
+  /programs/{program_id}/issues:
+    get:
+      summary: Get issues for a program
+      parameters:
+        - name: program_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK

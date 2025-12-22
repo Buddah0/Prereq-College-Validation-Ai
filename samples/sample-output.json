@@ -1,0 +1,8 @@
+[
+  {
+    "id": "STUB101",
+    "name": "Stub Course from Ingest",
+    "prerequisites": [],
+    "source": "samples/sample-catalog.html"
+  }
+]

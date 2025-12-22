@@ -1,0 +1,8 @@
+networkx
+fastapi
+uvicorn
+pydantic-settings
+httpx
+aiofiles
+python-multipart
+pytest

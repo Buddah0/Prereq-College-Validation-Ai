@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional, Literal
 from datetime import datetime
-import uuid
+
 
 JobStatus = Literal["queued", "running", "done", "failed"]
 

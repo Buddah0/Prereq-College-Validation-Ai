@@ -1,17 +1,9 @@
 from fastapi import FastAPI
-from app.core.config import settings
-from app.api.routers import health, catalogs, analysis, jobs, reports
-
-app = FastAPI(
-    title=settings.PROJECT_NAME,
-    version=settings.VERSION,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json"
-)
-
-# Global Exception Handlers
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.responses import JSONResponse
+from app.core.config import settings
+from app.api.routers import health, catalogs, analysis, jobs, reports
 from app.schemas.common import ErrorResponse
 
 @app.exception_handler(StarletteHTTPException)

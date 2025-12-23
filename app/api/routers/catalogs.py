@@ -2,11 +2,12 @@ from fastapi import APIRouter, UploadFile, File, HTTPException, Body, Request
 from typing import Optional
 from datetime import datetime
 from app.schemas.catalogs import CatalogResponse, CatalogIngestURL
+from app.schemas.common import ErrorResponse
 from app.services.ingest_service import process_uploaded_catalog, fetch_catalog_from_url
 
 router = APIRouter()
 
-@router.post("/", response_model=CatalogResponse)
+@router.post("/", response_model=CatalogResponse, responses={400: {"model": ErrorResponse}, 422: {"model": ErrorResponse}, 415: {"model": ErrorResponse}})
 async def create_catalog(request: Request):
     """
     Ingest a catalog via file upload OR URL.

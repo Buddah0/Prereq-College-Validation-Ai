@@ -8,6 +8,35 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
 
+# Global Exception Handlers
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi.responses import JSONResponse
+from app.schemas.common import ErrorResponse
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=ErrorResponse(
+            detail=exc.detail,
+            status_code=exc.status_code,
+            type="HTTPException"
+        ).model_dump()
+    )
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=422,
+        content=ErrorResponse(
+            detail="Validation Error",
+            status_code=422,
+            type="ValidationError",
+            additional_info={"errors": exc.errors()}
+        ).model_dump()
+    )
+
 # Include Routers
 app.include_router(health.router, tags=["Health"])
 app.include_router(catalogs.router, prefix="/catalogs", tags=["Catalogs"])

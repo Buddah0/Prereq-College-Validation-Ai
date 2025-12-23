@@ -1,5 +1,6 @@
 from fastapi import APIRouter, BackgroundTasks, HTTPException
 from app.schemas.jobs import JobResponse, JobCreate
+from app.schemas.common import ErrorResponse
 from app.storage.job_store import JobStore
 from app.services.analyze_service import run_analysis_task
 from app.core.config import settings
@@ -7,7 +8,7 @@ from pathlib import Path
 
 router = APIRouter()
 
-@router.post("/{catalog_id}/analyze", response_model=JobResponse)
+@router.post("/{catalog_id}/analyze", response_model=JobResponse, responses={404: {"model": ErrorResponse}})
 def analyze_catalog_endpoint(
     catalog_id: str,
     background_tasks: BackgroundTasks,

@@ -1,11 +1,12 @@
 from fastapi import APIRouter, HTTPException
 from typing import List, Optional
 from app.schemas.jobs import JobResponse
+from app.schemas.common import ErrorResponse
 from app.storage.job_store import JobStore
 
 router = APIRouter()
 
-@router.get("/{job_id}", response_model=JobResponse)
+@router.get("/{job_id}", response_model=JobResponse, responses={404: {"model": ErrorResponse}})
 def get_job_status(job_id: str):
     job = JobStore.get_job(job_id)
     if not job:

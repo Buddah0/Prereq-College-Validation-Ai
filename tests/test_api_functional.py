@@ -1,6 +1,5 @@
 import json
 import time
-from unittest.mock import MagicMock, patch, AsyncMock
 
 def test_health(client):
     resp = client.get("/health")
@@ -23,17 +22,19 @@ def test_upload_bad_json(client):
     resp = client.post("/catalogs/", files=files)
     assert resp.status_code == 422
 
-# Mocking httpx for URL ingest
-@patch("httpx.AsyncClient.get", new_callable=AsyncMock)
-def test_url_ingest(mock_get, client, sample_catalog_json):
+# Mocking httpx for URL ingest using pytest-httpx
+def test_url_ingest(httpx_mock, client, sample_catalog_json):
+    url = "https://raw.githubusercontent.com/user/repo/main/catalog.json"
+    
     # Setup mock response
-    mock_resp = MagicMock()
-    mock_resp.status_code = 200
-    mock_resp.content = json.dumps(sample_catalog_json).encode('utf-8')
-    mock_get.return_value = mock_resp
+    httpx_mock.add_response(
+        url=url,
+        json=sample_catalog_json,
+        status_code=200
+    )
     
     # Payload
-    payload = {"source_url": "https://raw.githubusercontent.com/user/repo/main/catalog.json"}
+    payload = {"source_url": url}
     resp = client.post("/catalogs/", json=payload)
     
     assert resp.status_code == 200, resp.text

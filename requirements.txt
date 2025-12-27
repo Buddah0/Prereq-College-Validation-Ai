@@ -6,3 +6,5 @@ httpx
 aiofiles
 python-multipart
 pytest
+pytest-httpx
+ruff

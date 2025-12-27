@@ -141,7 +141,14 @@ The project now supports a FastAPI layer for async analysis and integration.
 
 ### Quick Start
 ```bash
+# Create and activate venv
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
 pip install -r requirements.txt
+
+# Run server
 uvicorn app.main:app --reload
 ```
 Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
@@ -187,6 +194,15 @@ curl http://localhost:8000/reports/REP-xyz
 ---
 
 ## 🏗 Architecture
+
+```mermaid
+graph LR
+    Client[Client / Demo Script] -->|HTTP| API[FastAPI Layer]
+    API -->|Async| Services[Services]
+    Services -->|Validation| Engine[Analysis Engine]
+    Services -->|Read/Write| FS[(Filesystem / Job Store)]
+    Engine --> FS
+```
 
 ### High‑Level Components
 - Ingestion Layer: scrapers, PDF extractor, API connectors, parsing pipeline

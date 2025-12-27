@@ -1,13 +1,15 @@
 from pydantic import BaseModel
 from typing import Optional, Literal
 from datetime import datetime
-import uuid
+
 
 JobStatus = Literal["queued", "running", "done", "failed"]
+
 
 class JobCreate(BaseModel):
     catalog_id: str
     options: dict = {}
+
 
 class JobResponse(BaseModel):
     job_id: str

@@ -1,10 +1,10 @@
-from pydantic import BaseModel, HttpUrl, Field
-from typing import Optional, List, Dict, Any
+from pydantic import BaseModel, HttpUrl
 from datetime import datetime
-import uuid
+
 
 class CatalogIngestURL(BaseModel):
     source_url: HttpUrl
+
 
 class CatalogResponse(BaseModel):
     catalog_id: str

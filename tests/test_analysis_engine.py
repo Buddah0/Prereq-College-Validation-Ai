@@ -1,4 +1,3 @@
-
 import unittest
 import json
 import networkx as nx
@@ -15,10 +14,10 @@ from analysis_engine import (
     check_isolated,
     check_bottlenecks,
     check_longest_chain,
-    Issue,
     Report,
-    analyze_catalog
+    analyze_catalog,
 )
+
 
 class TestAnalysisEngine(unittest.TestCase):
     def setUp(self):
@@ -28,7 +27,9 @@ class TestAnalysisEngine(unittest.TestCase):
             {"id": "B", "name": "Course B", "prerequisites": ["A"]},
             {"id": "C", "name": "Course C", "prerequisites": ["B"]},
         ]
-        self.temp_file = tempfile.NamedTemporaryFile(mode='w', delete=False, encoding='utf-8')
+        self.temp_file = tempfile.NamedTemporaryFile(
+            mode="w", delete=False, encoding="utf-8"
+        )
         json.dump(self.test_data, self.temp_file)
         self.temp_file.close()
 
@@ -39,7 +40,7 @@ class TestAnalysisEngine(unittest.TestCase):
         g = nx.DiGraph()
         g.add_edge("A", "B")
         g.add_edge("B", "A")
-        
+
         issues = check_cycles(g)
         self.assertEqual(len(issues), 1)
         self.assertEqual(issues[0].code, "cycle")
@@ -50,11 +51,11 @@ class TestAnalysisEngine(unittest.TestCase):
     def test_missing_prereqs(self):
         # Graph has A -> B, but only B is in real_ids
         g = nx.DiGraph()
-        g.add_edge("A", "B") # A is prereq for B
-        
+        g.add_edge("A", "B")  # A is prereq for B
+
         real_ids = {"B"}
         issues = check_missing_prereqs(g, real_ids)
-        
+
         self.assertEqual(len(issues), 1)
         self.assertEqual(issues[0].code, "missing_prereq")
         self.assertEqual(issues[0].courses, ["A"])
@@ -64,7 +65,7 @@ class TestAnalysisEngine(unittest.TestCase):
         g = nx.DiGraph()
         g.add_node("A")
         real_ids = {"A"}
-        
+
         issues = check_isolated(g, real_ids)
         self.assertEqual(len(issues), 1)
         self.assertEqual(issues[0].code, "isolated_course")
@@ -77,9 +78,9 @@ class TestAnalysisEngine(unittest.TestCase):
         g.add_edge("A", "C")
         g.add_edge("A", "D")
         g.add_edge("A", "E")
-        
+
         real_ids = {"A", "B", "C", "D", "E"}
-        
+
         # Test with threshold 3
         issues, top = check_bottlenecks(g, real_ids, min_out_degree=3)
         self.assertTrue(len(issues) >= 1)
@@ -91,11 +92,13 @@ class TestAnalysisEngine(unittest.TestCase):
         g = nx.DiGraph()
         path = ["A", "B", "C", "D", "E", "F", "G", "H"]
         nx.add_path(g, path)
-        
+
         issues, length, path_nodes, blocked = check_longest_chain(g)
         self.assertFalse(blocked)
-        self.assertEqual(length, 8) # path is [A, B, C, D, E, F, G, H] which has 8 nodes 
-        
+        self.assertEqual(
+            length, 8
+        )  # path is [A, B, C, D, E, F, G, H] which has 8 nodes
+
         self.assertTrue(len(issues) > 0)
         self.assertEqual(issues[0].code, "long_chain")
 
@@ -106,5 +109,6 @@ class TestAnalysisEngine(unittest.TestCase):
         self.assertEqual(report.metrics["course_count"], 3)
         self.assertEqual(report.metrics["num_cycles"], 0)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

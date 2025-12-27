@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from typing import List, Optional
+from typing import List
 from app.schemas.jobs import JobResponse
 from app.schemas.common import ErrorResponse
 from app.storage.job_store import JobStore

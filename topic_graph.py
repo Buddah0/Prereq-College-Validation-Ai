@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Iterable, List, Dict, Set
+from typing import Iterable, List
 import networkx as nx
 
 def build_course_graph(json_path: str) -> nx.DiGraph:

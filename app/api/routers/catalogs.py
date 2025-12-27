@@ -1,7 +1,6 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException, Body, Request
-from typing import Optional
+from fastapi import APIRouter, HTTPException, Request
 from datetime import datetime
-from app.schemas.catalogs import CatalogResponse, CatalogIngestURL
+from app.schemas.catalogs import CatalogResponse
 from app.schemas.common import ErrorResponse
 from app.services.ingest_service import process_uploaded_catalog, fetch_catalog_from_url
 

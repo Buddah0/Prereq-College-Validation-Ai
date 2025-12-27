@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import uuid
-from typing import Dict, List, Optional
-from app.schemas.jobs import JobStatus, JobResponse
+from typing import Dict, Optional
+from app.schemas.jobs import JobStatus
 
 class JobStore:
     _jobs: Dict[str, dict] = {}

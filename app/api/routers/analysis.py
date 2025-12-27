@@ -1,5 +1,5 @@
 from fastapi import APIRouter, BackgroundTasks, HTTPException
-from app.schemas.jobs import JobResponse, JobCreate
+from app.schemas.jobs import JobResponse
 from app.schemas.common import ErrorResponse
 from app.storage.job_store import JobStore
 from app.services.analyze_service import run_analysis_task

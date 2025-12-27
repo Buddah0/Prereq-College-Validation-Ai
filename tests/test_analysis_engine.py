@@ -15,7 +15,6 @@ from analysis_engine import (
     check_isolated,
     check_bottlenecks,
     check_longest_chain,
-    Issue,
     Report,
     analyze_catalog
 )

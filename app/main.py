@@ -1,15 +1,13 @@
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.responses import JSONResponse
-from app.api.routers import health, catalogs, analysis, jobs, reports
+
+from app.api.routers import analysis, catalogs, health, jobs, reports
+from app.core.config import settings
 from app.schemas.common import ErrorResponse
 from fastapi import FastAPI
 
-app = FastAPI(
-    title="College Validator AI",
-    description="API for validating college prerequisites",
-    version="1.0.0",
-)
+app = FastAPI(title=settings.PROJECT_NAME, version=settings.VERSION)
 
 
 @app.exception_handler(StarletteHTTPException)
@@ -17,7 +15,9 @@ async def http_exception_handler(request, exc):
     return JSONResponse(
         status_code=exc.status_code,
         content=ErrorResponse(
-            detail=exc.detail, status_code=exc.status_code, type="HTTPException"
+            detail=exc.detail,
+            status_code=exc.status_code,
+            type="HTTPException",
         ).model_dump(),
     )
 
@@ -43,6 +43,7 @@ app.include_router(
 )  # Nested under catalogs for /{id}/analyze
 app.include_router(jobs.router, prefix="/jobs", tags=["Jobs"])
 app.include_router(reports.router, prefix="/reports", tags=["Reports"])
+
 
 if __name__ == "__main__":
     import uvicorn

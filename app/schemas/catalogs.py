@@ -5,6 +5,7 @@ from datetime import datetime
 class CatalogIngestURL(BaseModel):
     source_url: HttpUrl
 
+
 class CatalogResponse(BaseModel):
     catalog_id: str
     stored_at: datetime

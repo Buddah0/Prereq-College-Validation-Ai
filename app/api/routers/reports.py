@@ -6,7 +6,11 @@ from app.storage.filesystem import load_json_sync
 
 router = APIRouter()
 
-@router.get("/{report_id}", responses={404: {"model": ErrorResponse}, 500: {"model": ErrorResponse}})
+
+@router.get(
+    "/{report_id}",
+    responses={404: {"model": ErrorResponse}, 500: {"model": ErrorResponse}},
+)
 def get_report(report_id: str):
     """
     Returns the full JSON report.
@@ -15,7 +19,7 @@ def get_report(report_id: str):
     path = Path(settings.REPORTS_DIR) / f"{report_id}.json"
     if not path.exists():
         raise HTTPException(status_code=404, detail="Report not found")
-        
+
     try:
         data = load_json_sync(str(path))
         return data

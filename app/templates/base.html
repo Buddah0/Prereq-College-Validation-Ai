@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}College Validator AI{% endblock %}</title>
+    <!-- Minimal CSS Framework -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <!-- HTMX for interactivity -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <style>
+        /* Minimal Custom Overrides */
+        body { padding-top: 2rem; }
+        .container { max-width: 1200px; }
+        .danger { color: #c62828; }
+        .warning { color: #f57f17; }
+        .success { color: #2e7d32; }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <main class="container">
+        <nav>
+            <ul>
+                <li><strong>College Validator AI</strong></li>
+            </ul>
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/docs">API Docs</a></li>
+            </ul>
+        </nav>
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

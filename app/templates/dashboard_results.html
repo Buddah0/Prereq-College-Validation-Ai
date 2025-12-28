@@ -1,0 +1,55 @@
+<!-- dashboard_results.html (partial) -->
+{% if job.status == 'running' %}
+<div hx-get="/dashboard/jobs/{{ job.job_id }}" hx-trigger="every 1s" hx-target="#result-area" hx-swap="outerHTML">
+    <progress></progress>
+    <p>Analysis in progress... (Job ID: {{ job.job_id }})</p>
+</div>
+{% elif job.status == 'done' %}
+<div id="result-area">
+    <h3>Analysis Results</h3>
+    <div class="grid">
+        <a href="/reports/{{ job.report_id }}" role="button" class="secondary">Download JSON</a>
+        <a href="/reports/{{ job.report_id }}/csv" role="button" class="contrast">Download CSV</a>
+    </div>
+
+    <h4>Issues Found ({{ report.issues | length }})</h4>
+    <table>
+        <thead>
+            <tr>
+                <th>Severity</th>
+                <th>Type</th>
+                <th>Courses</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for issue in report.issues %}
+            <tr class="issue-row issue-{{ issue.severity }}">
+                <td>
+                    {% if issue.severity == 'high' %}🔴
+                    {% elif issue.severity == 'medium' %}🟠
+                    {% else %}🟢{% endif %}
+                    {{ issue.severity }}
+                </td>
+                <td>{{ issue.code }}</td>
+                <td>{{ issue.courses | join(", ") }}</td>
+                <td>{{ issue.message }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h4>Prerequisite Graph</h4>
+    <div id="cy"></div>
+    <!-- Hidden data for JS -->
+    <script id="graph-data" type="application/json">
+            {{ graph_elements | tojson | safe }}
+        </script>
+</div>
+{% elif job.status == 'failed' %}
+<div id="result-area" class="danger">
+    <h3>Analysis Failed</h3>
+    <p>Error: {{ job.error }}</p>
+    <button onclick="window.location.reload()">Reset</button>
+</div>
+{% endif %}

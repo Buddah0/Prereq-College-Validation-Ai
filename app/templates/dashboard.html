@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - College Validator AI{% endblock %}
+
+{% block head %}
+<!-- Cytoscape for graph viz -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+<style>
+    #cy {
+        width: 100%;
+        height: 600px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        margin-top: 1rem;
+    }
+
+    .issue-card {
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        border-left: 4px solid #ccc;
+        background: #fff;
+    }
+
+    .issue-high {
+        border-left-color: #d32f2f;
+    }
+
+    .issue-medium {
+        border-left-color: #fbc02d;
+    }
+
+    .issue-low {
+        border-left-color: #388e3c;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section>
+    <h2>Catalog Analysis</h2>
+    <div class="grid">
+        <div>
+            <article>
+                <header><strong>Select Existing Catalog</strong></header>
+                <form hx-post="/dashboard/analyze" hx-target="#result-area" hx-indicator="#loading">
+                    <label for="catalog_id">Catalog ID</label>
+                    <select id="catalog_id" name="catalog_id" required>
+                        {% for cat in catalogs %}
+                        <option value="{{ cat.id }}">{{ cat.id }} ({{ cat.course_count }} courses)</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit">Run Analysis</button>
+                    <!-- Or upload new (link to swagger/endpoint for now to keep valid scope) -->
+                    <small>To ingest new catalog, check <a
+                            href="/docs#/Ingestion/upload_catalog_api_v1_catalogs_upload_post" target="_blank">API
+                            Params</a></small>
+                </form>
+            </article>
+        </div>
+        <div>
+            <article>
+                <header><strong>Status</strong></header>
+                <div id="loading" class="htmx-indicator">Running analysis...</div>
+                <div id="result-area">
+                    <p>Select a catalog to view analysis.</p>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Minimal JS to handle Graph rendering from HTMX swap
+    document.body.addEventListener('htmx:afterSwap', function (evt) {
+        const target = evt.detail.target;
+        if (target.id === 'result-area') {
+            const graphDataEl = document.getElementById('graph-data');
+            if (graphDataEl) {
+                const elements = JSON.parse(graphDataEl.textContent);
+                initGraph(elements);
+            }
+        }
+    });
+
+    function initGraph(elements) {
+        cytoscape({
+            container: document.getElementById('cy'),
+            elements: elements,
+            style: [
+                {
+                    selector: 'node',
+                    style: {
+                        'background-color': '#0074D9',
+                        'label': 'data(id)',
+                        'color': '#fff',
+                        'text-valign': 'center',
+                        'text-halign': 'center'
+                    }
+                },
+                {
+                    selector: 'edge',
+                    style: {
+                        'width': 2,
+                        'line-color': '#ccc',
+                        'target-arrow-color': '#ccc',
+                        'target-arrow-shape': 'triangle',
+                        'curve-style': 'bezier'
+                    }
+                },
+                {
+                    selector: '.highlighted',
+                    style: {
+                        'background-color': '#FF4136',
+                        'line-color': '#FF4136',
+                        'func': 'target-arrow-color'
+                    }
+                }
+            ],
+            layout: {
+                name: 'breadthfirst',
+                directed: true,
+                padding: 10
+            }
+        });
+    }
+</script>
+{% endblock %}

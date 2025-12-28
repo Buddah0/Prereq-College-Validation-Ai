@@ -2,7 +2,7 @@ from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.responses import JSONResponse
 
-from app.api.routers import analysis, catalogs, health, jobs, reports
+from app.api.routers import analysis, catalogs, health, jobs, reports, dashboard
 from app.core.config import settings
 from app.schemas.common import ErrorResponse
 from fastapi import FastAPI
@@ -43,6 +43,7 @@ app.include_router(
 )  # Nested under catalogs for /{id}/analyze
 app.include_router(jobs.router, prefix="/jobs", tags=["Jobs"])
 app.include_router(reports.router, prefix="/reports", tags=["Reports"])
+app.include_router(dashboard.router, prefix="/dashboard", tags=["Dashboard"])
 
 
 if __name__ == "__main__":
